@@ -1,4 +1,4 @@
-#/usr/bin/python2.7
+#/usr/bin/python3
 
 import dot3k.backlight as backlight
 import sys
@@ -26,7 +26,7 @@ class Backlight():
 				backlight.rgb(red, green, blue)
 		except:
 			backlight.rgb(255, 255, 255)
-			print "exception raised " + sys.exc_info() 
+			print("exception raised " + sys.exc_info()) 
 
 	def power_off(self):
 		backlight.off()

@@ -1,4 +1,4 @@
-#/usr/bin/python2.7
+#/usr/bin/python3
 
 
 import dot3k.lcd as lcd
