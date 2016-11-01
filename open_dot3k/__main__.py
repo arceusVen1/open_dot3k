@@ -77,6 +77,16 @@ class Measure(Thread):
 			cleanAndWrite()
 		time.sleep(300)
 
+def out(signal, frame):
+	MESSAGE.clearScreen()
+	MESSAGE.writeMessage("out !")
+	time.sleep(3)
+	LED.ledZero()
+	LIGHT.power_off()
+	MESSAGE.clearScreen()
+	sys.exit(0)
+
+
 
 
 def main():
@@ -84,4 +94,7 @@ def main():
 	Display().start()
 
 if __name__ == '__main__':
+	signal.signal(signal.SIGINT, out)
+	main()
+
 	sys.exit(main())
