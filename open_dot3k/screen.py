@@ -13,7 +13,7 @@ class Screen():
 		self.content = "il fait " + str(temp) + "*C"
 		lcd.write(self.content)
 
-	def writeMessage(self.message):
+	def writeMessage(self, message):
 		self.content = message
 		lcd.write(self.content)
 
