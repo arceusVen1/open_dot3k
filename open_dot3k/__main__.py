@@ -25,6 +25,7 @@ def cleanAndWrite():
 		LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
 		LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
 	else:
+		LIGHT.colorAlert()
 		MESSAGE.writeMessage(TEMP.message)
 	return
 
@@ -59,7 +60,7 @@ class Display(Thread):
 			MESSAGE.clearScreen()
 			LIGHT.power_off()
 			LED.ledZero()
-			os.kill(os.getpid(), signal.SIGKILL)
+			# os.kill(os.getpid(), signal.SIGKILL)
 
 
 		signal.pause()
