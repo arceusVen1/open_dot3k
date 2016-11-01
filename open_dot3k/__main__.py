@@ -1,4 +1,4 @@
-#/usr/bin/python3
+#!/usr/bin/python3
 
 import dot3k.joystick as j
 import time
@@ -18,11 +18,14 @@ VERROU = RLock()
 def cleanAndWrite():
 	if SCROLLER.scrollnum >= len(TEMP.temperatures):
 		SCROLLER.reset()
-	if SCROLLER.scrollnum < 0:
+	elif SCROLLER.scrollnum < 0:
 		SCROLLER.scrollnum = len(TEMP.temperatures) - 1
-	MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum])
-	LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
-	LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
+	if TEMP.message == "":
+		MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum])
+		LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
+		LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
+	else:
+		MESSAGE.writeMessage(TEMP.message)
 	return
 
 
