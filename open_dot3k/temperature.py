@@ -5,11 +5,17 @@ class Temperature():
 
 	def __init__(self):
 		self.temperatures = []
+		self.message = ""
 		return
 	
 	def readTemp(self):
-		self.temperatures = acqtemp()
-		return
+		result = acqtemp()
+		if isinstance(result, list):
+			self.temperatures=result
+			return self.temperatures
+		else:
+			self.message = result
+		return self.message
 
 	
 		
