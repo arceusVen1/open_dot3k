@@ -32,7 +32,7 @@ def cleanAndWrite():
 class Display(Thread):
 	"""docstring for Display"""
 	def __init__(self):
-		Thread.__init__()
+		Thread.__init__(self)
 	
 	def run(self):
 		@j.on(j.UP)
@@ -67,9 +67,9 @@ class Display(Thread):
 class Measure(Thread):
 	"""docstring for Measure"""
 	def __init__(self):
-		Thread.__init__()
+		Thread.__init__(self)
 		
-	def run():
+	def run(self):
 		with VERROU:
 			MESSAGE.clearScreen()
 			TEMP.readTemp()
@@ -79,8 +79,8 @@ class Measure(Thread):
 
 
 def main():
-	Measure.start()
-	Display.start()
+	Measure().start()
+	Display().start()
 
 if __name__ == '__main__':
 	sys.exit(main())
