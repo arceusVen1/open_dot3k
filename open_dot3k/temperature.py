@@ -11,11 +11,9 @@ class Temperature():
 	def readTemp(self):
 		result = acqtemp()
 		if isinstance(result, list):
-			self.temperatures=result
-			return self.temperatures
+			self.temperatures = result
 		else:
 			self.message = result
-		return self.message
 
 	
 		
