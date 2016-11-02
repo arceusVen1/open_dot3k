@@ -1,20 +1,17 @@
-#/usr/bin/python3
-
-
-import dot3k.joystick as j
+#!/usr/bin/python3
 
 
 class Scroller():
-	
-	def __init__(self):
-		self.scrollnum = 0
-		return
 
-	def rightSignal(self):
-		self.scrollnum += 1
+    def __init__(self):
+        self.scrollnum = 0
+        return
 
-	def leftSignal(self):
-		self.scrollnum -= 1
+    def rightSignal(self):
+        self.scrollnum += 1
 
-	def reset(self):
-		self.scrollnum = 0
+    def leftSignal(self):
+        self.scrollnum -= 1
+
+    def reset(self):
+        self.scrollnum = 0
