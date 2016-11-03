@@ -21,17 +21,17 @@ VERROU = RLock()
 
 
 def cleanAndWrite():
-    if SCROLLER.scrollnum >= len(TEMP.temperatures):
+    if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.messages):
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
-        SCROLLER.scrollnum = len(TEMP.temperatures) - 1
-    if TEMP.message == "":
+        SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
+    if SCROLLER.scrollnum < len(TEMP.temperatures):
         MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum])
         LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
         LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
     else:
         LIGHT.colorAlert()
-        MESSAGE.writeMessage(TEMP.message)
+        MESSAGE.writeMessage(TEMP.messages[SCROLLER.scrollnum])
     return
 
 
