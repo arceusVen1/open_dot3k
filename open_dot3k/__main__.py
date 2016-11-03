@@ -31,7 +31,7 @@ def cleanAndWrite():
         LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
     else:
         LIGHT.colorAlert()
-        MESSAGE.writeMessage(TEMP.messages[SCROLLER.scrollnum])
+        MESSAGE.writeMessage(TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures)])
     return
 
 
