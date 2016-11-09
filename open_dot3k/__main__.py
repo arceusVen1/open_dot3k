@@ -3,6 +3,7 @@
 import dot3k.joystick as j
 import time
 import sys
+import socket
 import os
 import signal
 from threading import Thread, RLock
@@ -18,6 +19,7 @@ LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
 VERROU = RLock()
+IP = ""
 
 
 def cleanAndWrite():
@@ -26,7 +28,7 @@ def cleanAndWrite():
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
     if SCROLLER.scrollnum < len(TEMP.temperatures):
-        MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum])
+        MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum], IP)
         LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
         LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
     else:
@@ -78,6 +80,7 @@ class Measure(Thread):
     def run(self):
         with VERROU:
             MESSAGE.clearScreen()
+            IP = socket.gethostbyname(socket.gethostname())
             TEMP.readTemp()
             cleanAndWrite()
         time.sleep(300)
