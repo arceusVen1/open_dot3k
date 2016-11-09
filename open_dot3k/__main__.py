@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
+import netifaces as ni
 import dot3k.joystick as j
 import time
 import sys
-import socket
 import os
 import signal
 from threading import Thread, RLock
@@ -19,8 +19,7 @@ LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
 VERROU = RLock()
-IP = ""
-
+IP = ni.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
 
 def cleanAndWrite():
     if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.messages):
@@ -80,7 +79,7 @@ class Measure(Thread):
     def run(self):
         with VERROU:
             MESSAGE.clearScreen()
-            IP = socket.gethostbyname(socket.gethostname())
+            IP = ni.ifaddresses('eth0')[2][0]['addr'] 
             TEMP.readTemp()
             cleanAndWrite()
         time.sleep(300)
