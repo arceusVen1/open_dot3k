@@ -19,7 +19,7 @@ LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
 VERROU = RLock()
-IP = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+IP = ni.ifaddresses('eth0')[ni.AF_INET][2][0]['addr']
 
 
 def cleanAndWrite():
