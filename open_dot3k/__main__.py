@@ -19,7 +19,7 @@ LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
 VERROU = RLock()
-IP = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+IP = ""
 
 
 def cleanAndWrite():
@@ -80,7 +80,10 @@ class Measure(Thread):
     def run(self):
         with VERROU:
             MESSAGE.clearScreen()
-            IP = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+            try:
+                IP = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+            except:
+                IP = "Not connected"
             TEMP.readTemp()
             cleanAndWrite()
         time.sleep(300)
