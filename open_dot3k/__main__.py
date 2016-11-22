@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import netifaces as ni
+
 import dot3k.joystick as j
 import time
 import sys
@@ -12,6 +12,7 @@ import backlight
 import ledbar
 import temperature
 import joystick
+import ip
 
 MESSAGE = screen.Screen()
 TEMP = temperature.Temperature()
@@ -19,7 +20,7 @@ LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
 VERROU = RLock()
-IP = ""
+IP = ip.IP()
 
 
 def cleanAndWrite():
@@ -28,12 +29,13 @@ def cleanAndWrite():
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
     if SCROLLER.scrollnum < len(TEMP.temperatures):
-        MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum], IP)
+        MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum], IP.address)
         LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
         LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
     else:
         LIGHT.colorAlert()
-        MESSAGE.writeMessage(TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures)])
+        MESSAGE.writeMessage(
+            TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures)])
     return
 
 
@@ -80,12 +82,10 @@ class Measure(Thread):
     def run(self):
         with VERROU:
             MESSAGE.clearScreen()
-            try:
-                IP = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
-            except:
-                IP = "Not connected"
+            IP.get_address()
             TEMP.readTemp()
-            cleanAndWrite()
+            if len(TEMP.messages) > 0:
+                cleanAndWrite()
         time.sleep(300)
 
 
