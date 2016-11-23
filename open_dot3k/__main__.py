@@ -6,7 +6,7 @@ import time
 import sys
 import os
 import signal
-from threading import Thread, RLock
+from threading import Thread, Lock
 import screen
 import backlight
 import ledbar
@@ -19,7 +19,7 @@ TEMP = temperature.Temperature()
 LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
-VERROU = RLock()
+VERROU = Lock()
 IP = ip.IP()
 
 
@@ -80,16 +80,17 @@ class Measure(Thread):
         Thread.__init__(self)
 
     def run(self):
-        with VERROU:
-            print("1")
-            MESSAGE.clearScreen()
-            print("2")
-            IP.get_address()
-            print("3")
-            TEMP.readTemp()
-            print("4")
-            if len(TEMP.messages) > 0:
-                cleanAndWrite()
+        VERROU.acquire()
+        print("1")
+        MESSAGE.clearScreen()
+        print("2")
+        IP.get_address()
+        print("3")
+        TEMP.readTemp()
+        print("4")
+        if len(TEMP.messages) > 0:
+            cleanAndWrite()
+        VERROU.release()
         print("5")
         time.sleep(300)
 
