@@ -81,11 +81,16 @@ class Measure(Thread):
 
     def run(self):
         with VERROU:
+            print("1")
             MESSAGE.clearScreen()
+            print("2")
             IP.get_address()
+            print("3")
             TEMP.readTemp()
+            print("4")
             if len(TEMP.messages) > 0:
                 cleanAndWrite()
+        print("5")
         time.sleep(300)
 
 
