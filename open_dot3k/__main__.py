@@ -90,13 +90,13 @@ class Measure(Thread):
 
     def run(self):
         while True:
-            VERROU.acquire()
+            VERROU1.acquire()
             MESSAGE.clearScreen()
             IP.get_address()
             TEMP.readTemp()
             if len(TEMP.messages) > 0:
                 cleanAndWrite()
-            VERROU.release()
+            VERROU1.release()
             time.sleep(300)
         return
 
