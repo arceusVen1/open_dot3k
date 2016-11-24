@@ -80,14 +80,15 @@ class Measure(Thread):
         Thread.__init__(self)
 
     def run(self):
-        VERROU.acquire()
-        MESSAGE.clearScreen()
-        IP.get_address()
-        TEMP.readTemp()
-        if len(TEMP.messages) > 0:
-            cleanAndWrite()
-        VERROU.release()
-        time.sleep(300)
+        while True:
+            VERROU.acquire()
+            MESSAGE.clearScreen()
+            IP.get_address()
+            TEMP.readTemp()
+            if len(TEMP.messages) > 0:
+                cleanAndWrite()
+            VERROU.release()
+            time.sleep(300)
 
 
 def out(signal, frame):
