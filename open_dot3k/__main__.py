@@ -19,7 +19,8 @@ TEMP = temperature.Temperature()
 LED = ledbar.LedBar()
 SCROLLER = joystick.Scroller()
 LIGHT = backlight.Backlight()
-VERROU = Lock()
+VERROU1 = Lock()
+VERROU2 = Lock()
 IP = ip.IP()
 
 
@@ -48,27 +49,35 @@ class Display(Thread):
     def run(self):
         @j.on(j.UP)
         def handle_up(pin):
+            VERROU2.acquire()
             MESSAGE.clearScreen()
             TEMP.readTemp()
             cleanAndWrite()
+            VERROU2.release()
 
         @j.on(j.RIGHT)
         def handle_right(pin):
+            VERROU2.acquire()
             MESSAGE.clearScreen()
             SCROLLER.rightSignal()
             cleanAndWrite()
 
         @j.on(j.LEFT)
         def handle_left(pin):
+            VERROU2.acquire()
             MESSAGE.clearScreen()
             SCROLLER.leftSignal()
             cleanAndWrite()
+            VERROU2.release()
 
         @j.on(j.DOWN)
         def handle_down(pin):
+            VERROU2.acquire()
             MESSAGE.clearScreen()
             LIGHT.power_off()
             LED.ledZero()
+            VERROU2.release()
+            
             # os.kill(os.getpid(), signal.SIGKILL)
         signal.pause()
 
