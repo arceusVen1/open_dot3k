@@ -61,6 +61,7 @@ class Display(Thread):
             MESSAGE.clearScreen()
             SCROLLER.rightSignal()
             cleanAndWrite()
+            VERROU2.release()
 
         @j.on(j.LEFT)
         def handle_left(pin):
@@ -77,7 +78,6 @@ class Display(Thread):
             LIGHT.power_off()
             LED.ledZero()
             VERROU2.release()
-            
             # os.kill(os.getpid(), signal.SIGKILL)
         signal.pause()
 
