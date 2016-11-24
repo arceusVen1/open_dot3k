@@ -89,6 +89,7 @@ class Measure(Thread):
                 cleanAndWrite()
             VERROU.release()
             time.sleep(300)
+        return
 
 
 def out(signal, frame):
