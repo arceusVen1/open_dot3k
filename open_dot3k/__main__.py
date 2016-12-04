@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 
-import dot3k.joystick as j
+import dothat.touch as t
 import time
 import sys
 import os
@@ -47,32 +47,32 @@ class Display(Thread):
         Thread.__init__(self)
 
     def run(self):
-        @j.on(j.UP)
-        def handle_up(pin):
+        @t.on(t.UP)
+        def handle_up(ch, evt):
             VERROU2.acquire()
             MESSAGE.clearScreen()
             TEMP.readTemp()
             cleanAndWrite()
             VERROU2.release()
 
-        @j.on(j.RIGHT)
-        def handle_right(pin):
+        @t.on(t.RIGHT)
+        def handle_right(ch, evt):
             VERROU2.acquire()
             MESSAGE.clearScreen()
             SCROLLER.rightSignal()
             cleanAndWrite()
             VERROU2.release()
 
-        @j.on(j.LEFT)
-        def handle_left(pin):
+        @t.on(t.LEFT)
+        def handle_left(ch, evt):
             VERROU2.acquire()
             MESSAGE.clearScreen()
             SCROLLER.leftSignal()
             cleanAndWrite()
             VERROU2.release()
 
-        @j.on(j.DOWN)
-        def handle_down(pin):
+        @t.on(t.DOWN)
+        def handle_down(ch, evt):
             VERROU2.acquire()
             MESSAGE.clearScreen()
             LIGHT.power_off()
@@ -90,13 +90,13 @@ class Measure(Thread):
 
     def run(self):
         while True:
-            VERROU.acquire()
+            VERROU1.acquire()
             MESSAGE.clearScreen()
             IP.get_address()
             TEMP.readTemp()
             if len(TEMP.messages) > 0:
                 cleanAndWrite()
-            VERROU.release()
+            VERROU1.release()
             time.sleep(300)
         return
 
