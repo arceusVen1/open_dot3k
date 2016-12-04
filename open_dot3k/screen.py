@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from datetime import datetime
 import psutil
-import dot3k.lcd as lcd
+import dothat.lcd as lcd
 
 
 class Screen():

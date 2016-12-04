@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import dot3k.backlight as backlight
+import dothat.backlight as backlight
 
 
 class Backlight():
