@@ -14,4 +14,8 @@ class IP():
         try:
             self.address = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
         except:
+            pass
+        try:
+            self.address = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+        except:
             self.address = "Not connected"
