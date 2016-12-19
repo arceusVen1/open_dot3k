@@ -26,7 +26,7 @@ IP = ip.IP()
 
 
 def cleanAndWrite():
-    probes = TEMP.temperatures.keys()
+    probes = list(TEMP.temperatures.keys())
     time = datetime.now().strftime("%H:%M")
     if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.messages):
         SCROLLER.reset()
