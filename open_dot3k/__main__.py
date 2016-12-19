@@ -3,7 +3,6 @@
 
 import dothat.touch as t
 import time
-from datetime import datetime
 import sys
 import os
 import signal
@@ -27,14 +26,13 @@ IP = ip.IP()
 
 def cleanAndWrite():
     probes = list(TEMP.temperatures.keys())
-    time = datetime.now().strftime("%H:%M")
     if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.messages):
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
     if SCROLLER.scrollnum < len(TEMP.temperatures):
         probe = probes[SCROLLER.scrollnum]
-        MESSAGE.writeTemp(probe, TEMP.temperatures[probe], IP.address, time)
+        MESSAGE.writeTemp(probe, TEMP.temperatures[probe], IP.address, TEMP.timeOfRead)
         LIGHT.color(float(TEMP.temperatures[probe]))
         LED.set_size(float(TEMP.temperatures[probe]))
     else:
