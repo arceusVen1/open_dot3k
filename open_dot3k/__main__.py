@@ -34,6 +34,7 @@ def cleanAndWrite():
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
     if SCROLLER.scrollnum < len(TEMP.temperatures):
         probe = probes[SCROLLER.scrollnum]
+        print(TEMP.temperatures[probe])
         MESSAGE.writeTemp(TEMP.temperatures[probe], IP.address, time)
         LIGHT.color(float(TEMP.temperatures[probe]))
         LED.set_size(float(TEMP.temperatures[probe]))
