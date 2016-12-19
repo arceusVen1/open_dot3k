@@ -11,6 +11,8 @@ class Screen():
 
     def writeTemp(self, probe, temp, ip, time):
         cpu = psutil.cpu_percent()
+        if len(str(probe)) > 7:
+            probe = str(probe)[:6]
         self.content = self.__fullLine(str(time) + "     " + str(cpu) + "%")
         self.content += self.__fullLine(str(probe) + " : " + str(temp) + "*C")
         self.content += self.__fullLine(str(ip))
