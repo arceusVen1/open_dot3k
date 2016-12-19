@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from datetime import datetime
 import psutil
 import dothat.lcd as lcd
 
@@ -10,9 +9,8 @@ class Screen():
         lcd.clear()
         self.content = ""
 
-    def writeTemp(self, temp, ip):
+    def writeTemp(self, temp, ip, time):
         cpu = psutil.cpu_percent()
-        time = datetime.now().strftime("%H:%M")
         self.content = self.__fullLine(str(time) + "     " + str(cpu) + "%")
         self.content += self.__fullLine("il fait " + str(temp) + "*C")
         self.content += self.__fullLine(str(ip))

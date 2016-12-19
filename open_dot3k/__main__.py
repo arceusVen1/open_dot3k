@@ -3,6 +3,7 @@
 
 import dothat.touch as t
 import time
+from datetime import datetime
 import sys
 import os
 import signal
@@ -25,14 +26,17 @@ IP = ip.IP()
 
 
 def cleanAndWrite():
+    probes = TEMP.temperatures.keys()
+    time = datetime.now().strftime("%H:%M")
     if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.messages):
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
     if SCROLLER.scrollnum < len(TEMP.temperatures):
-        MESSAGE.writeTemp(TEMP.temperatures[SCROLLER.scrollnum], IP.address)
-        LIGHT.color(float(TEMP.temperatures[SCROLLER.scrollnum]))
-        LED.set_size(float(TEMP.temperatures[SCROLLER.scrollnum]))
+        probe = probes[SCROLLER.scrollnum]
+        MESSAGE.writeTemp(TEMP.temperatures[probe], IP.address, time)
+        LIGHT.color(float(TEMP.temperatures[probe]))
+        LED.set_size(float(TEMP.temperatures[probe]))
     else:
         LIGHT.colorAlert()
         MESSAGE.writeMessage(
@@ -78,7 +82,6 @@ class Display(Thread):
             LIGHT.power_off()
             LED.ledZero()
             VERROU2.release()
-            # os.kill(os.getpid(), signal.SIGKILL)
         signal.pause()
 
 
@@ -96,6 +99,8 @@ class Measure(Thread):
             TEMP.readTemp()
             if len(TEMP.messages) > 0:
                 cleanAndWrite()
+            else:
+                LIGHT.power_off()
             VERROU1.release()
             time.sleep(300)
         return
@@ -108,6 +113,7 @@ def out(signal, frame):
     LED.ledZero()
     LIGHT.power_off()
     MESSAGE.clearScreen()
+    os.kill(os.getpid(), signal.SIGKILL)
     sys.exit(0)
 
 
