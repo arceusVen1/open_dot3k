@@ -9,10 +9,10 @@ class Screen():
         lcd.clear()
         self.content = ""
 
-    def writeTemp(self, temp, ip, time):
+    def writeTemp(self, probe, temp, ip, time):
         cpu = psutil.cpu_percent()
         self.content = self.__fullLine(str(time) + "     " + str(cpu) + "%")
-        self.content += self.__fullLine("il fait " + str(temp) + "*C")
+        self.content += self.__fullLine(str(probe) + " : " + str(temp) + "*C")
         self.content += self.__fullLine(str(ip))
         lcd.write(self.content)
 
