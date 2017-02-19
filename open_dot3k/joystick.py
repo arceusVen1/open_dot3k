@@ -7,10 +7,10 @@ class Scroller():
         self.scrollnum = 0
         return
 
-    def rightSignal(self):
+    def right_signal(self):
         self.scrollnum += 1
 
-    def leftSignal(self):
+    def left_signal(self):
         self.scrollnum -= 1
 
     def reset(self):

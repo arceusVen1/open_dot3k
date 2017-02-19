@@ -13,5 +13,5 @@ class LedBar():
         for i in range(int(temp)):
             backlight.set_graph(i / self.maxtemp)
 
-    def ledZero(self):
+    def led_zero(self):
         backlight.set_graph(0)

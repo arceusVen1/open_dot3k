@@ -6,13 +6,15 @@ from datetime import datetime
 class Temperature():
 
     def __init__(self):
-        self.temperatures = []
+        self.temperatures = {}
+        self.humidty = {}
         self.messages = []
-        self.timeOfRead = ""
+        self.time_of_read = ""
         return
 
-    def readTemp(self):
+    def read_temp(self):
         result = acqtemp()
-        self.temperatures = result["temperatures"]
-        self.messages = result["messages"]
-        self.timeOfRead = datetime.now().strftime("%H:%M")
+        self.temperatures = result[0]
+        self.humidty = result[1]
+        self.messages = result[2]
+        self.time_of_read = datetime.now().strftime("%H:%M")

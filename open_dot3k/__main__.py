@@ -24,20 +24,23 @@ VERROU2 = Lock()
 IP = ip.IP()
 
 
-def cleanAndWrite():
-    probes = list(TEMP.temperatures.keys())
-    if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.messages):
+def clean_and_write():
+    probes = list(TEMP.temperatures.keys()) + list(TEMP.humidity.keys())
+    if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.humidity) + len(TEMP.messages):
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
-        SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.messages) - 1
+        SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.humidity) + len(TEMP.messages) - 1
     if SCROLLER.scrollnum < len(TEMP.temperatures):
         probe = probes[SCROLLER.scrollnum]
-        MESSAGE.writeTemp(probe, TEMP.temperatures[probe], IP.address, TEMP.timeOfRead)
+        MESSAGE.write_temp(probe, TEMP.temperatures[probe], IP.address, TEMP.time_of_read)
         LIGHT.color(float(TEMP.temperatures[probe]))
         LED.set_size(float(TEMP.temperatures[probe]))
+    elif len(TEMP.humidity) + len(TEMP.temperatures) > SCROLLER.scrollnum >= len(TEMP.temperatures):
+        probe = probes[SCROLLER.scrollnum]
+        MESSAGE.write_humidity(probe, TEMP.humidity[probe], IP.address, TEMP.time_of_read)
     else:
-        LIGHT.colorAlert()
-        MESSAGE.writeMessage(
+        LIGHT.color_alert()
+        MESSAGE.write_message(
             TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures)])
     return
 
@@ -52,34 +55,43 @@ class Display(Thread):
         @t.on(t.UP)
         def handle_up(ch, evt):
             VERROU2.acquire()
-            MESSAGE.clearScreen()
-            TEMP.readTemp()
-            cleanAndWrite()
+            MESSAGE.clear_screen()
+            TEMP.read_temp()
+            clean_and_write()
             VERROU2.release()
 
         @t.on(t.RIGHT)
         def handle_right(ch, evt):
             VERROU2.acquire()
-            MESSAGE.clearScreen()
-            SCROLLER.rightSignal()
-            cleanAndWrite()
+            MESSAGE.clear_screen()
+            SCROLLER.right_signal()
+            clean_and_write()
             VERROU2.release()
 
         @t.on(t.LEFT)
         def handle_left(ch, evt):
             VERROU2.acquire()
-            MESSAGE.clearScreen()
-            SCROLLER.leftSignal()
-            cleanAndWrite()
+            MESSAGE.clear_screen()
+            SCROLLER.left_signal()
+            clean_and_write()
             VERROU2.release()
 
         @t.on(t.DOWN)
         def handle_down(ch, evt):
             VERROU2.acquire()
-            MESSAGE.clearScreen()
+            MESSAGE.clear_screen()
             LIGHT.power_off()
-            LED.ledZero()
+            LED.led_zero()
             VERROU2.release()
+
+        @t.on(t.BUTTON)
+        def handle_button(ch, evt):
+            pass
+
+        @t.on(t.CANCEL)
+        def handle_cancel(ch, evt):
+            pass
+
         signal.pause()
 
 
@@ -92,11 +104,11 @@ class Measure(Thread):
     def run(self):
         while True:
             VERROU1.acquire()
-            MESSAGE.clearScreen()
+            MESSAGE.clear_screen()
             IP.get_address()
-            TEMP.readTemp()
+            TEMP.read_temp()
             if len(TEMP.messages) > 0:
-                cleanAndWrite()
+                clean_and_write()
             else:
                 LIGHT.power_off()
             VERROU1.release()
@@ -105,12 +117,12 @@ class Measure(Thread):
 
 
 def out(signal, frame):
-    MESSAGE.clearScreen()
-    MESSAGE.writeMessage("out !")
+    MESSAGE.clear_screen()
+    MESSAGE.write_message("out !")
     time.sleep(3)
-    LED.ledZero()
+    LED.led_zero()
     LIGHT.power_off()
-    MESSAGE.clearScreen()
+    MESSAGE.clear_screen()
     os.kill(os.getpid(), signal.SIGKILL)
     sys.exit(0)
 
