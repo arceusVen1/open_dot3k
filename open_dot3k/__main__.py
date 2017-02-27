@@ -34,9 +34,9 @@ def clean_and_write():
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.humidity) + len(TEMP.messages) - 1
     probe = probes[SCROLLER.scrollnum]
     fprobe = MATERIALS.get_probe_by_slug(probe)
-    if fprobe[0] is not None:
-        max = fprobe[0]["max"]
-        min = fprobe[0]["min"]
+    if fprobe[0] is not None and fprobe[0]["alert"]["bool"]:
+        max = fprobe[0]["alert"]["max"]
+        min = fprobe[0]["alert"]["min"]
     else:
         max = None
         min = None
