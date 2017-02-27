@@ -13,6 +13,7 @@ import ledbar
 import temperature
 import joystick
 import ip
+from open_ds18b20.probe import Materials
 
 MESSAGE = screen.Screen()
 TEMP = temperature.Temperature()
@@ -22,6 +23,7 @@ LIGHT = backlight.Backlight()
 VERROU1 = Lock()
 VERROU2 = Lock()
 IP = ip.IP()
+MATERIALS = Materials()
 
 
 def clean_and_write():
@@ -30,18 +32,25 @@ def clean_and_write():
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.humidity) + len(TEMP.messages) - 1
+    probe = probes[SCROLLER.scrollnum]
+    fprobe = MATERIALS.get_probe_by_slug(probe)
+    if fprobe[0] is not None:
+        max = fprobe["max"]
+        min = fprobe["min"]
+    else:
+        max = None
+        min = None
     if SCROLLER.scrollnum < len(TEMP.temperatures):
-        probe = probes[SCROLLER.scrollnum]
         MESSAGE.write_temp(probe, TEMP.temperatures[probe], IP.address, TEMP.time_of_read)
-        LIGHT.color(float(TEMP.temperatures[probe]))
-        LED.set_size(float(TEMP.temperatures[probe]))
+        LIGHT.color(float(TEMP.temperatures[probe]), max, min)
+        LED.set_size(float(TEMP.temperatures[probe]), max)
     elif len(TEMP.humidity) + len(TEMP.temperatures) > SCROLLER.scrollnum >= len(TEMP.temperatures):
-        probe = probes[SCROLLER.scrollnum]
         MESSAGE.write_humidity(probe, TEMP.humidity[probe], IP.address, TEMP.time_of_read)
+        LIGHT.color(float(TEMP.humidity[probe]), max, min)
+        LED.set_size(float(TEMP.humidity[probe]), max)
     else:
         LIGHT.color_alert()
-        MESSAGE.write_message(
-            TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures)])
+        MESSAGE.write_message(TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures) - len(TEMP.humidity)])
     return
 
 
@@ -49,6 +58,8 @@ class Display(Thread):
     """docstring for Display"""
 
     def __init__(self):
+        MATERIALS.allow_config()
+        MATERIALS.get_data()
         Thread.__init__(self)
 
     def run(self):
