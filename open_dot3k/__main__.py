@@ -32,9 +32,9 @@ def clean_and_write():
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.humidity) + len(TEMP.messages) - 1
-    if SCROLLER.scrollnum >= len(TEMP.temperatures) +len(TEMP.humidity):
+    if SCROLLER.scrollnum >= len(TEMP.temperatures) + len(TEMP.humidity):
         LIGHT.color_alert()
-        MESSAGE.write_message(TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures) - len(TEMP.humidity)])
+        MESSAGE.write_message(TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures) - len(TEMP.humidity) + 1])
     else:
         probe = probes[SCROLLER.scrollnum]
         fprobe = MATERIALS.get_probe_by_slug(probe)
