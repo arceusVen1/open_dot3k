@@ -26,7 +26,7 @@ class Backlight():
                 blue = 0
                 backlight.rgb(red, green, blue)
         except:
-            self.color_alert()
+            backlight.rgb(255,255,255)
             # print("exception raised " + sys.exc_info())
 
     def color_alert(self):
