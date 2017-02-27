@@ -6,21 +6,21 @@ import dothat.backlight as backlight
 class Backlight():
 
     def __init__(self):
-        self.maxtemp = 50.0
-        self.mintemp = 10.0
-        self.midtemp = 30.0
-        self.step = 255.0 / ((self.maxtemp - self.mintemp) / 2)
+        pass
 
-    def color(self, temp):
+    def color(self, value, max, min):
+        if max and min:
+            mid = min + (max-min)/2
+            step = 255.0 / ((max - min)/ 2)
         try:
-            if temp <= self.midtemp:
-                increment = int((temp - self.mintemp) * self.step)
+            if value <= mid:
+                increment = int((value - min) * step)
                 green = 0 + increment
                 blue = 255 - increment
                 red = 0
                 backlight.rgb(red, green, blue)
-            elif temp > self.midtemp:
-                increment = int((temp - self.midtemp) * self.step)
+            elif value > mid:
+                increment = int((value - mid) * step)
                 green = 255 - increment
                 red = 0 + increment
                 blue = 0
