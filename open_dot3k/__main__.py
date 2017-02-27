@@ -32,25 +32,26 @@ def clean_and_write():
         SCROLLER.reset()
     elif SCROLLER.scrollnum < 0:
         SCROLLER.scrollnum = len(TEMP.temperatures) + len(TEMP.humidity) + len(TEMP.messages) - 1
-    probe = probes[SCROLLER.scrollnum]
-    fprobe = MATERIALS.get_probe_by_slug(probe)
-    if fprobe[0] is not None and fprobe[0]["alert"]["bool"]:
-        max = fprobe[0]["alert"]["max"]
-        min = fprobe[0]["alert"]["min"]
-    else:
-        max = None
-        min = None
-    if SCROLLER.scrollnum < len(TEMP.temperatures):
-        MESSAGE.write_temp(probe, TEMP.temperatures[probe], IP.address, TEMP.time_of_read)
-        LIGHT.color(float(TEMP.temperatures[probe]), max, min)
-        LED.set_size(float(TEMP.temperatures[probe]), max)
-    elif len(TEMP.humidity) + len(TEMP.temperatures) > SCROLLER.scrollnum >= len(TEMP.temperatures):
-        MESSAGE.write_humidity(probe, TEMP.humidity[probe], IP.address, TEMP.time_of_read)
-        LIGHT.color(float(TEMP.humidity[probe]), max, min)
-        LED.set_size(float(TEMP.humidity[probe]), max)
-    else:
+    if SCROLLER.scrollnum >= len(TEMP.temperatures) +len(TEMP.humidity):
         LIGHT.color_alert()
         MESSAGE.write_message(TEMP.messages[SCROLLER.scrollnum - len(TEMP.temperatures) - len(TEMP.humidity)])
+    else:
+        probe = probes[SCROLLER.scrollnum]
+        fprobe = MATERIALS.get_probe_by_slug(probe)
+        if fprobe[0] is not None and fprobe[0]["alert"]["bool"]:
+            max = fprobe[0]["alert"]["max"]
+            min = fprobe[0]["alert"]["min"]
+        else:
+            max = None
+            min = None
+        if SCROLLER.scrollnum < len(TEMP.temperatures):
+            MESSAGE.write_temp(probe, TEMP.temperatures[probe], IP.address, TEMP.time_of_read)
+            LIGHT.color(float(TEMP.temperatures[probe]), max, min)
+            LED.set_size(float(TEMP.temperatures[probe]), max)
+        elif len(TEMP.humidity) + len(TEMP.temperatures) > SCROLLER.scrollnum >= len(TEMP.temperatures):
+            MESSAGE.write_humidity(probe, TEMP.humidity[probe], IP.address, TEMP.time_of_read)
+            LIGHT.color(float(TEMP.humidity[probe]), max, min)
+            LED.set_size(float(TEMP.humidity[probe]), max)
     return
 
 
