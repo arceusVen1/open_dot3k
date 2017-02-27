@@ -35,8 +35,8 @@ def clean_and_write():
     probe = probes[SCROLLER.scrollnum]
     fprobe = MATERIALS.get_probe_by_slug(probe)
     if fprobe[0] is not None:
-        max = fprobe["max"]
-        min = fprobe["min"]
+        max = fprobe[0]["max"]
+        min = fprobe[0]["min"]
     else:
         max = None
         min = None
